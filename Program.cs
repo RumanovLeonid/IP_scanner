@@ -1,13 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Net.NetworkInformation;
 
-class PingCheck
+class IP_Scaner
 {
-    //Конструктор класса с одним аргументом:
-    public PingCheck(string A)
+    public static void Main()
+    {
+        //Thread tread_1_to_125 = new Thread();
+        //Thread tread_126_to_254 = new Thread();
+
+        Console.WriteLine("Активные устройства в подсети:");
+        for (int i = 1; i <= 254; i++)
+        {
+            string ipnum = "192.168.1." + i;
+            PingCheck(ipnum);
+        }
+        Console.WriteLine("Сканирование завершено");
+
+        Console.ReadKey();
+    }
+
+    public static void PingCheck(string A)
     {
         Ping ping = new Ping();
         PingReply pingReply = null;
@@ -15,26 +28,9 @@ class PingCheck
         pingReply = ping.Send(server);
         if (pingReply.Status == IPStatus.Success)
         {
-            Console.WriteLine(server); //server          
-            Console.WriteLine(pingReply.Status); //Статус           
+            Console.WriteLine(server);
+            Console.WriteLine(pingReply.Status);
             Console.WriteLine();
         }
-    }
-}
-//Класс с главным методом программы:
-class NetworkSettingsDemo
-{
-    //Главный метод программы:
-    public static void Main()
-    {
-        Console.WriteLine("Активные устройства в подсети:");
-        for (int i = 1; i <= 254; i++)
-        {
-            string ipnum = "192.168.1." + i;
-            PingCheck pch = new PingCheck(ipnum);
-        }
-        Console.WriteLine("Сканирование завершено");
-        //Ожидание нажатия какой-нибудь кнопки:
-        Console.ReadKey();
     }
 }

@@ -5,13 +5,13 @@ namespace IP_scanner
 {
     class IP_Scaner
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
 
             Console.WriteLine("Активные устройства в подсети:");
             
-            ToTask scan = new ToTask();
-            Dictionary<string,string> result= scan.GetLanHosts();
+            Scan scan = new Scan(args);
+            Dictionary<string,string> result= scan.Run();
             
             foreach(var item in result)
             {

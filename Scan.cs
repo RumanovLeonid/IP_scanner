@@ -9,29 +9,35 @@ namespace IP_scanner
 {
     public class Scan
     {
+        #region Поля класса
         private readonly List<string> IP_List = new List<string>();
         private string IPAdress;
         private string SubNetMask;
         private readonly string[] arg;
         private readonly Task[] tasks = new Task[4];
+        #endregion
 
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
+        /// <param name="args">Аргументы командной строки</param>
         public Scan(string[] args)
         {
             arg = args;
         }
 
+        /// <summary>
+        /// Получение информации ключ-значение о хостах в сети
+        /// </summary>
+        /// <returns>Информацию об адресах и именах хостов</returns>
         public Dictionary<string, string> ReturnHostInfo()
-        {
-            return Run();
-        }
-        private Dictionary<string, string> Run()
         {
             Dictionary<string, string> IPRangeInformation = new Dictionary<string, string>();
             IPHostEntry host;
 
             ScanIPRange();
 
-            foreach (var item in IP_List)
+            foreach (var item in ArrangeIP_List())
             {
                 try
                 {
@@ -48,6 +54,27 @@ namespace IP_scanner
 
             return IPRangeInformation;
         }
+
+        /// <summary>
+        /// Выравнивание списка адресов по левому краю
+        /// </summary>
+        /// <returns>Выравненный по левому краю список адресов</returns>
+        private List<string> ArrangeIP_List()
+        {
+            List<string> _ = new List<string>();
+            
+            foreach(var item in IP_List)
+            {
+                _.Add(item.PadRight(15));
+            }
+
+            return _;
+        }
+
+        /// <summary>
+        /// Сканирование адресов
+        /// </summary>
+        /// <returns>Отсортированный список адресов</returns>
         private List<string> ScanIPRange()
         {
             if (arg.Length == 0)
@@ -65,23 +92,26 @@ namespace IP_scanner
                 Range(0);
             }
 
-
             IP_List.Sort(CompareIPAdress);
 
             return IP_List;
         }
-        
+
+        /// <summary>
+        /// Сканирование диапазонов адресов
+        /// </summary>
+        /// <param name="range">Диапазон адресов</param>
         private void Range(int range)
         {
             ToPing ping = new ToPing();
 
-            switch(range)
+            switch (range)
             {
                 case 0:
                     SubNetMask = arg[0] + ".";
                     int begin = Convert.ToInt16(arg[1]);
                     int end = Convert.ToInt16(arg[2]);
-                                        
+
                     ScanRange(ping, begin, end);
                     break;
                 case 1:
@@ -96,9 +126,15 @@ namespace IP_scanner
                 case 4:
                     ScanRange(ping, 192, 254);
                     break;
-             }
+            }
         }
-                
+
+        /// <summary>
+        /// Получение адреса хостов из заданного диапазона
+        /// </summary>
+        /// <param name="ping">Поток</param>
+        /// <param name="begin">Начало диапазона</param>
+        /// <param name="end">Конец диапазона</param>
         private void ScanRange(ToPing ping, int begin, int end)
         {
             for (int i = begin; i <= end; i++)
@@ -110,6 +146,13 @@ namespace IP_scanner
                 }
             }
         }
+
+        /// <summary>
+        /// Вспомогательный метод для сортировки адресов
+        /// </summary>
+        /// <param name="x">Первый адрес</param>
+        /// <param name="y">Второй адрес</param>
+        /// <returns>Результат сравнения</returns>
         private int CompareIPAdress(string x, string y)
         {
             int xHost, yHost;
@@ -129,13 +172,18 @@ namespace IP_scanner
             }
             else
             {
-                yHost = Convert.ToInt32(y.Substring(10, 2));
+                if (y.Length == 11)
+                {
+                    yHost = Convert.ToInt32(y.Substring(10, 1));
+                }
+                else
+                {
+                    yHost = Convert.ToInt32(y.Substring(10, 2));
+                }
             }
 
             if (xHost < yHost) return -1;
             if (xHost == yHost) { return 0; } else { return 1; };
-
         }
-
     }
 }

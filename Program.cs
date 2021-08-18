@@ -8,16 +8,16 @@ namespace IP_scanner
         public static void Main(string[] args)
         {
 
-            Console.WriteLine("Активные устройства в подсети:");
-            
+            Console.WriteLine("Активные устройства в сети:");
+            Console.WriteLine("---------------------------");
             Scan scan = new Scan(args);
-            Dictionary<string,string> result= scan.Run();
-            
-            foreach(var item in result)
+
+            foreach(var item in scan.ReturnHostInfo())
             {
                 Console.WriteLine(item.Key+" "+item.Value);
             }
 
+            Console.WriteLine("---------------------------");
             Console.WriteLine("Сканирование завершено");
             Console.ReadKey();
         }

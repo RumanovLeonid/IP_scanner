@@ -19,7 +19,12 @@ namespace IP_scanner
         {
             arg = args;
         }
-        public Dictionary<string, string> Run()
+
+        public Dictionary<string, string> ReturnHostInfo()
+        {
+            return Run();
+        }
+        private Dictionary<string, string> Run()
         {
             Dictionary<string, string> IPRangeInformation = new Dictionary<string, string>();
             IPHostEntry host;

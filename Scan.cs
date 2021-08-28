@@ -41,7 +41,7 @@ namespace IP_scanner
             {
                 try
                 {
-                    host = Dns.GetHostEntry(item);
+                    host = Dns.GetHostEntry(item.Trim());
                 }
                 catch (SocketException)
                 {

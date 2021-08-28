@@ -18,7 +18,6 @@ namespace IP_scanner
 
             Console.WriteLine("---------------------------");
             Console.WriteLine("Сканирование завершено");
-            Console.ReadKey();
         }
     }
 }
